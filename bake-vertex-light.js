@@ -4,7 +4,7 @@ function generateColor(dot, dist)
 {
 	var colorText = "rgba(";
 
-	var falloff = 1.0;
+	var falloff = 5.0;
 	var dist = dist / falloff;
 	var intensity = 1 / (dist * dist);
 
@@ -83,7 +83,6 @@ AFRAME.registerComponent('bake-vertex-light', {
 					dot = normalLook.dot(lightLook);
 
 					colorText = generateColor(dot, dist);
-					console.log(i, colorText);
 					if( !!face.vertexColors[j] )
 						face.vertexColors[j].set(colorText);
 					else
