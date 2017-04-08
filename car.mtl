@@ -1,0 +1,7 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl Carcamero_ma
+Kd 1 1 1
+illum 2
+map_Kd camero map.png
