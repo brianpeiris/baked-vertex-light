@@ -6,7 +6,7 @@ function generateColor(dot, dist)
 
 	var falloff = 5.0;
 	var dist = dist / falloff;
-	var intensity = 1 / (dist * dist);
+	var intensity = document.querySelector('a-light').getAttribute('intensity') / (dist * dist);
 
 	var midLight = 255 / 2.0;
 	var maxLight = 255 - midLight;
@@ -32,9 +32,21 @@ AFRAME.registerComponent('bake-vertex-light', {
 		this.el.sceneEl.object3D.updateMatrixWorld();
 		var light = this.data.light.object3DMap.light;
 
+		var pos = document.querySelector('a-light').getAttribute('position');
+light.position.set(pos.x, pos.y, pos.z);
+
+        console.log(light);
+
+        if (object.geometry.attributes) {
+	console.log('is buffer');
+	var geo = new THREE.Geometry().fromBufferGeometry(object.geometry);
+	object.geometry = geo;
+	console.log(object.geometry, geo);
+}
+
 		if( !object.geometry )
 			return;
-
+        object.geometry = object.geometry.clone();
 		object.material.vertexColors = THREE.FaceColors;
 
 		object.parent.updateMatrixWorld();
@@ -44,6 +56,7 @@ AFRAME.registerComponent('bake-vertex-light', {
 		if( !object.geometry.attributes )
 		{
 			console.log('yay');
+			console.log(dist);
 			// non-BUFFER geometry
 
 			var count = object.geometry.faces.length;
@@ -92,13 +105,14 @@ AFRAME.registerComponent('bake-vertex-light', {
 				}
 			}
 		}
+
 		else
 		{
 			// BUFFER geometry
 			console.log(object, object.geometry);
 		}
 	},
-	init: function () {
+	update: function () {
 		this.bake(this.el.object3DMap.mesh);
 		this.el.addEventListener('model-loaded', function () {
 			console.log('loaded');
